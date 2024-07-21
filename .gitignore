@@ -37,6 +37,5 @@ next-env.d.ts
 
 certificates
 
-integerSumLists.json
-
-generated/*
+*.json
+*.gz

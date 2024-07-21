@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --silent",
-    "generate": "npx ts-node ./src/generation/index.ts"
+    "generate": "npx ts-node ./src/generation/pre-index.ts && npx ts-node ./src/generation/index.ts"
   },
   "dependencies": {
     "@types/jest": "^29.5.12",
