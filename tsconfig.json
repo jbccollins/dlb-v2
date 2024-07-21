@@ -21,6 +21,21 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  	// This is potentially an alternative way to run scripts directly...
+	"ts-node": {
+		// these options are overrides used only by ts-node
+		// same as our --compilerOptions flag and our TS_NODE_COMPILER_OPTIONS environment variable
+		"compilerOptions": {
+			"module": "commonjs" // because modules fucking suck
+		},
+		"require": ["tsconfig-paths/register"] // To make it understand @ paths
+	},
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "jest.setup.js",
+    ".next/types/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }
