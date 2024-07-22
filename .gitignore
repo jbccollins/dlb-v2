@@ -37,5 +37,5 @@ next-env.d.ts
 
 certificates
 
-*.json
-*.gz
+/src/generation/generated/**/*.json
+/src/generation/generated/**/*.gz
