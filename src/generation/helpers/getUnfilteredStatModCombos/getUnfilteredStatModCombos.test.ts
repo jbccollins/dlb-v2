@@ -1,7 +1,6 @@
-import { ArmorStatIdList, getDefaultArmorStatMapping } from "@/definitions/ArmorStat";
-import { EArmorStatId } from "@/definitions/IdEnums";
 
 import { paretoOptimalModCombinations, zeroWastedStatsModCombinations } from "@/generation/definitions";
+import { NUM_ARMOR_STATS } from "@/lib/constants";
 import { tester } from "@/tests";
 import { produce } from "immer";
 import getUnfilteredStatModCombos from "./getUnfilteredStatModCombos";
@@ -10,37 +9,28 @@ import getUnfilteredStatModCombos from "./getUnfilteredStatModCombos";
 const testFunc = tester('getUnfilteredStatModCombos', getUnfilteredStatModCombos);
 const defaultInput: Parameters<typeof getUnfilteredStatModCombos> = [
   {
-    distances: getDefaultArmorStatMapping(),
+    distances: [0, 0, 0, 0, 0, 0],
     distanceToModCombinationsMapping: paretoOptimalModCombinations,
   },
 ];
 
-const defaultOutput: ReturnType<typeof getUnfilteredStatModCombos> = {
-  [EArmorStatId.Mobility]: [],
-  [EArmorStatId.Resilience]: [],
-  [EArmorStatId.Recovery]: [],
-  [EArmorStatId.Discipline]: [],
-  [EArmorStatId.Intellect]: [],
-  [EArmorStatId.Strength]: [],
-};
+const defaultOutput: ReturnType<typeof getUnfilteredStatModCombos> = [[], [], [], [], [], []]
 
 testFunc({
   name: 'returns empty arrays for default input',
   input: defaultInput,
   outputResolver: (output) => {
-    ArmorStatIdList.forEach((statId) => {
-      expect(output![statId]).toEqual(defaultOutput[statId]);
-    });
+    expect(output).toEqual(defaultOutput);
   },
 });
 
 // Adjusting defaultInput for a target stat shortfall of 5 in mobility
 const inputWithMobilityShortfall = produce(defaultInput, (draft) => {
-  draft[0].distances[EArmorStatId.Mobility] = 5;
+  draft[0].distances[0] = 5;
 });
 
 const outputWithMobilityShortfall = produce(defaultOutput, (draft) => {
-  draft[EArmorStatId.Mobility] = [
+  draft[0] = [
     {
       exactStatPoints: 5,
       numArtificeMods: 0,
@@ -60,18 +50,15 @@ testFunc({
   name: 'handles a target stat shortfall of 5 mobility',
   input: inputWithMobilityShortfall,
   outputResolver: (output) => {
-    ArmorStatIdList.forEach((statId) => {
-      // Check if output contains all expected items, regardless of order
-      expect(output![statId]).toEqual(expect.arrayContaining(outputWithMobilityShortfall[statId]));
-      // Additionally, check if there are no extra items in the output
-      expect(output![statId].length).toEqual(outputWithMobilityShortfall[statId].length);
-    });
+    for (let i = 0; i < NUM_ARMOR_STATS; i++) {
+      expect(output![i]).toEqual(outputWithMobilityShortfall[i]);
+    }
   },
 });
 
 // Adjusting defaultInput for a target stat shortfall of 5 in mobility
 const inputWithUnachievableZeroWastedStats = produce(defaultInput, (draft) => {
-  draft[0].distances[EArmorStatId.Mobility] = 58;
+  draft[0].distances[0] = 58;
   draft[0].distanceToModCombinationsMapping = zeroWastedStatsModCombinations
 });
 

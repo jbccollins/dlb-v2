@@ -1,9 +1,7 @@
-import { ArmorStatIdList } from '@/definitions/ArmorStat';
-import { DistanceToIntegerSumListsMappping, integerSumLists, paretoOptimalModCombinations } from '@/generation/definitions';
+import { DistanceToIntegerSumListsMappping, integerSumLists, paretoOptimalModCombinations, StatList } from '@/generation/definitions';
 
 import { getAllValidStatModCombos } from '@/generation/helpers/getAllValidStatModCombos/getAllValidStatModCombos';
 import { MAX_POTENTIAL_STAT_BOOST, MIN_POTENTIAL_STAT_BOOST } from '@/lib/constants';
-import { getArmorStatMappingFromStatList } from '@/lib/utils';
 
 export default function buildAllDistanceModCombinations(distance: number) {
   if (distance < MIN_POTENTIAL_STAT_BOOST || distance > MAX_POTENTIAL_STAT_BOOST) {
@@ -19,7 +17,7 @@ export default function buildAllDistanceModCombinations(distance: number) {
     result[resultKey] = [];
 
     const allValidStatModCombos = getAllValidStatModCombos({
-      distances: getArmorStatMappingFromStatList(integerSumListItem),
+      distances: integerSumListItem as StatList,
       distanceToModCombinationsMapping: paretoOptimalModCombinations
     });
 
@@ -30,10 +28,10 @@ export default function buildAllDistanceModCombinations(distance: number) {
 
     allValidStatModCombos.forEach((statModCombo) => {
       const condensedStatModCombo: number[][] = [];
-      ArmorStatIdList.forEach((armorStatId) => {
-        const { numMajorMods, numMinorMods, numArtificeMods } = statModCombo[armorStatId];
+      statModCombo.forEach((statModComboItem) => {
+        const { numMajorMods, numMinorMods, numArtificeMods } = statModComboItem;
         condensedStatModCombo.push([numMajorMods, numMinorMods, numArtificeMods]);
-      });
+      })
       result[resultKey].push(condensedStatModCombo);
     })
   }

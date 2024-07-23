@@ -1,4 +1,3 @@
-import { EArmorStatId } from "@/definitions/IdEnums";
 import * as integerSumListsJSON from '@/generation/generated/integerSumLists.json';
 import * as paretoOptimalModCombinationsJSON from '@/generation/generated/paretoOptimalModCombinations.json';
 import * as zeroWastedStatsModCombinationsJSON from '@/generation/generated/zeroWastedStatsModCombinations.json';
@@ -35,6 +34,8 @@ export type GenericRequiredModCombo = {
   exactStatPoints: number;
 };
 
+export type SixGRMC = [GenericRequiredModCombo, GenericRequiredModCombo, GenericRequiredModCombo, GenericRequiredModCombo, GenericRequiredModCombo, GenericRequiredModCombo];
+
 export const getDefaultGenericRequiredModCombo = (): GenericRequiredModCombo => ({
   numArtificeMods: 0,
   numMajorMods: 0,
@@ -42,16 +43,14 @@ export const getDefaultGenericRequiredModCombo = (): GenericRequiredModCombo => 
   exactStatPoints: 0,
 });
 
-export type StatModCombo = Record<EArmorStatId, GenericRequiredModCombo>;
-
-export const getDefaultStatModCombo = (): StatModCombo => ({
-  [EArmorStatId.Mobility]: getDefaultGenericRequiredModCombo(),
-  [EArmorStatId.Resilience]: getDefaultGenericRequiredModCombo(),
-  [EArmorStatId.Recovery]: getDefaultGenericRequiredModCombo(),
-  [EArmorStatId.Discipline]: getDefaultGenericRequiredModCombo(),
-  [EArmorStatId.Intellect]: getDefaultGenericRequiredModCombo(),
-  [EArmorStatId.Strength]: getDefaultGenericRequiredModCombo(),
-});
+export const getDefaultGenericRequiredModCombos = (): SixGRMC => ([
+  getDefaultGenericRequiredModCombo(),
+  getDefaultGenericRequiredModCombo(),
+  getDefaultGenericRequiredModCombo(),
+  getDefaultGenericRequiredModCombo(),
+  getDefaultGenericRequiredModCombo(),
+  getDefaultGenericRequiredModCombo(),
+])
 
 export type DistanceToModCombinationsMapping = {
   [K in keyof Record<IntRange<1, 65>, never>]: GenericRequiredModCombo[];
@@ -64,3 +63,5 @@ export type DistanceToIntegerSumListsMappping = {
 export type DistanceToCondesedStatModCombosMapping = {
   [K in keyof Record<IntRange<1, 65>, never>]: number[][][][];
 };
+
+export type StatList = [number, number, number, number, number, number];

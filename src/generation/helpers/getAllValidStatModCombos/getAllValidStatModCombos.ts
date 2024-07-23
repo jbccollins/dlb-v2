@@ -1,10 +1,10 @@
-import { ArmorStatIdList, ArmorStatMapping } from "@/definitions/ArmorStat";
-import { DistanceToModCombinationsMapping, getDefaultStatModCombo, StatModCombo } from "@/generation/definitions";
+import { DistanceToModCombinationsMapping, getDefaultGenericRequiredModCombos, SixGRMC, StatList } from "@/generation/definitions";
 import getUnfilteredStatModCombos from "@/generation/helpers/getUnfilteredStatModCombos/getUnfilteredStatModCombos";
-import { NUM_ARMOR_PIECES } from "@/lib/constants";
+import { NUM_ARMOR_PIECES, NUM_ARMOR_STATS } from "@/lib/constants";
+import { produce } from "immer";
 
 type GetAllValidStatModCombosParams = {
-  distances: ArmorStatMapping,
+  distances: StatList,
   distanceToModCombinationsMapping: DistanceToModCombinationsMapping;
 };
 
@@ -21,27 +21,26 @@ export const getAllValidStatModCombos = ({
     return null;
   }
 
-  let result: StatModCombo[] = [getDefaultStatModCombo()];
+  let result: SixGRMC[] = [getDefaultGenericRequiredModCombos()]
 
-  for (let i = 0; i < ArmorStatIdList.length; i++) {
-    const armorStatId = ArmorStatIdList[i];
-    const unfilteredStatModCombo = unfilteredStatModCombos[armorStatId];
+  for (let armorStatIndex = 0; armorStatIndex < NUM_ARMOR_STATS; armorStatIndex++) {
+    const unfilteredStatModCombo = unfilteredStatModCombos[armorStatIndex];
     // If we don't need any mods for this stat, skip it
     if (unfilteredStatModCombo.length === 0) {
       continue;
     }
-    const newResult: StatModCombo[] = [];
+    const newResult: SixGRMC[] = [];
     result.forEach((establishedCombo) => {
       let totalEstablishedStatMods = 0;
       let totalEstablishedArtificeMods = 0;
-      ArmorStatIdList.forEach((armorStatId) => {
+      for (let j = 0; j < establishedCombo.length; j++) {
         const { numMajorMods, numMinorMods, numArtificeMods } =
-          establishedCombo[armorStatId];
+          establishedCombo[j];
         totalEstablishedStatMods += numMajorMods + numMinorMods;
         totalEstablishedArtificeMods += numArtificeMods;
-      });
+      }
       unfilteredStatModCombo.forEach((potentialAddition) => {
-        const { numMajorMods, numMinorMods, numArtificeMods } =
+        const { numMajorMods, numMinorMods, numArtificeMods, exactStatPoints } =
           potentialAddition;
         const newStatModCount =
           totalEstablishedStatMods + numMajorMods + numMinorMods;
@@ -53,10 +52,18 @@ export const getAllValidStatModCombos = ({
         ) {
           return;
         }
-        newResult.push({
-          ...establishedCombo,
-          [armorStatId]: potentialAddition,
+        // Merge the established combo's stats at armorStatIndex with the potential addition
+        // Note that this is REALLY slow due to the use of immer. It can be much faster if we
+        // just use a for loop and manually copy the values over but idfc since this is only run once
+        const newCombo = produce(establishedCombo, (draft) => {
+          draft[armorStatIndex] = {
+            numArtificeMods,
+            numMajorMods,
+            numMinorMods,
+            exactStatPoints,
+          };
         });
+        newResult.push(newCombo);
       });
     });
     // If the result ever becomes empty, we know it's impossible to achieve the desired stats

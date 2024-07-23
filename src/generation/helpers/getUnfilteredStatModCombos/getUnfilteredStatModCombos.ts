@@ -1,10 +1,11 @@
-import { ArmorStatIdList, ArmorStatMapping } from "@/definitions/ArmorStat";
-import { EArmorStatId } from "@/definitions/IdEnums";
-import { DistanceToModCombinationsMapping, GenericRequiredModCombo } from "@/generation/definitions";
+import { DistanceToModCombinationsMapping, GenericRequiredModCombo, StatList } from "@/generation/definitions";
+import { NUM_ARMOR_STATS } from "@/lib/constants";
+type GRMCA = GenericRequiredModCombo[];
+type SixGRMCA = [GRMCA, GRMCA, GRMCA, GRMCA, GRMCA, GRMCA];
 
 
 interface GetUnfilteredStatModCombosParams {
-  distances: ArmorStatMapping;
+  distances: StatList;
   distanceToModCombinationsMapping: DistanceToModCombinationsMapping;
 }
 
@@ -15,18 +16,10 @@ export default function getUnfilteredStatModCombos(
   }: GetUnfilteredStatModCombosParams
 ) {
 
-  const allGenericCombos: Record<EArmorStatId, GenericRequiredModCombo[]> = {
-    [EArmorStatId.Mobility]: [],
-    [EArmorStatId.Resilience]: [],
-    [EArmorStatId.Recovery]: [],
-    [EArmorStatId.Discipline]: [],
-    [EArmorStatId.Intellect]: [],
-    [EArmorStatId.Strength]: [],
-  };
+  const allGenericCombos: SixGRMCA = [[], [], [], [], [], []];
 
-  for (let i = 0; i < ArmorStatIdList.length; i++) {
-    const armorStatId = ArmorStatIdList[i];
-    const distance = distances[armorStatId];
+  for (let i = 0; i < NUM_ARMOR_STATS; i++) {
+    const distance = distances[i];
 
     if (distance === 0) {
       continue;
@@ -39,7 +32,7 @@ export default function getUnfilteredStatModCombos(
       return null;
     }
 
-    allGenericCombos[armorStatId] = genericCombos;
+    allGenericCombos[i] = genericCombos;
   }
 
   return allGenericCombos;

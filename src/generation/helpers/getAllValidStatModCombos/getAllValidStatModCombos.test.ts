@@ -1,6 +1,4 @@
-import { getDefaultArmorStatMapping } from "@/definitions/ArmorStat";
-import { EArmorStatId } from "@/definitions/IdEnums";
-import { getDefaultStatModCombo, paretoOptimalModCombinations } from "@/generation/definitions";
+import { getDefaultGenericRequiredModCombos, paretoOptimalModCombinations } from "@/generation/definitions";
 import { tester } from "@/tests";
 import { produce } from "immer";
 import { getAllValidStatModCombos } from "./getAllValidStatModCombos";
@@ -9,12 +7,12 @@ const testFunc = tester('getAllValidStatModCombos', getAllValidStatModCombos);
 
 const defaultInput: Parameters<typeof getAllValidStatModCombos> = [
   {
-    distances: getDefaultArmorStatMapping(),
+    distances: [0, 0, 0, 0, 0, 0],
     distanceToModCombinationsMapping: paretoOptimalModCombinations,
   },
 ];
 
-const defaultOutput: ReturnType<typeof getAllValidStatModCombos> = [getDefaultStatModCombo()];
+const defaultOutput: ReturnType<typeof getAllValidStatModCombos> = [getDefaultGenericRequiredModCombos()];
 
 testFunc({
   name: 'returns empty array for default input',
@@ -28,14 +26,7 @@ testFunc({
   name: 'returns null for impossible distances',
   input:
     produce(defaultInput, (draft) => {
-      draft[0].distances = {
-        [EArmorStatId.Mobility]: 20,
-        [EArmorStatId.Resilience]: 20,
-        [EArmorStatId.Recovery]: 20,
-        [EArmorStatId.Discipline]: 20,
-        [EArmorStatId.Intellect]: 20,
-        [EArmorStatId.Strength]: 20
-      }
+      draft[0].distances = [20, 20, 20, 20, 20, 20];
     }),
   outputResolver: (output) => {
     expect(output).toBeNull();
@@ -46,14 +37,7 @@ testFunc({
 testFunc({
   name: 'returns valid stat mod combos for possible distances',
   input: produce(defaultInput, (draft) => {
-    draft[0].distances = {
-      [EArmorStatId.Mobility]: 10,
-      [EArmorStatId.Resilience]: 10,
-      [EArmorStatId.Recovery]: 10,
-      [EArmorStatId.Discipline]: 10,
-      [EArmorStatId.Intellect]: 10,
-      [EArmorStatId.Strength]: 10
-    }
+    draft[0].distances = [10, 10, 10, 10, 10, 10];
   }),
   outputResolver: (output) => {
     // All six permutations of 5 major mods and 4 artifice mods
