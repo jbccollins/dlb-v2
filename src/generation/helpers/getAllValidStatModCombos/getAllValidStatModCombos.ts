@@ -1,4 +1,5 @@
-import { DistanceToModCombinationsMapping, getDefaultGenericRequiredModCombos, SixGRMC, StatList } from "@/generation/definitions";
+import { StatList } from "@/definitions/ArmorStat";
+import { DistanceToModCombinationsMapping, getDefaultGenericRequiredModCombos, SixGRMC } from "@/generation/definitions";
 import getUnfilteredStatModCombos from "@/generation/helpers/getUnfilteredStatModCombos/getUnfilteredStatModCombos";
 import { NUM_ARMOR_PIECES, NUM_ARMOR_STATS } from "@/lib/constants";
 import { produce } from "immer";

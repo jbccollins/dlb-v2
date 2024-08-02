@@ -3,7 +3,7 @@
 // This is useful as it effectively generates all possible distances that can occur
 // from a set of starting stat values to the set of possible desired stat tiers
 import buildIntegerSumList from "@/generation/helpers/buildIntegerSumList/buildIntegerSumList";
-import { MAX_POTENTIAL_STAT_BOOST, MIN_POTENTIAL_STAT_BOOST } from "@/lib/constants";
+import { MAX_POTENTIAL_STAT_BOOST } from "@/lib/constants";
 import createLogger from '@/lib/logger';
 import { stringify } from "@/lib/utils";
 import { promises as fs } from 'fs';
@@ -19,7 +19,7 @@ export default async function generateIntegerSumLists() {
   // logger.info('Test', [1, 2, 3], true, { derp: 'herp' })
   logger.info("Start...")
   const integerSumLists: Record<number, number[][]> = {};
-  for (let i = MIN_POTENTIAL_STAT_BOOST; i <= MAX_POTENTIAL_STAT_BOOST; i++) {
+  for (let i = 0; i <= MAX_POTENTIAL_STAT_BOOST; i++) {
     integerSumLists[i] = buildIntegerSumList(i, 6);
   }
 

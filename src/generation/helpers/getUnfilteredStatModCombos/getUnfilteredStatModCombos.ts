@@ -1,4 +1,5 @@
-import { DistanceToModCombinationsMapping, GenericRequiredModCombo, StatList } from "@/generation/definitions";
+import { StatList } from "@/definitions/ArmorStat";
+import { DistanceToModCombinationsMapping, GenericRequiredModCombo } from "@/generation/definitions";
 import { NUM_ARMOR_STATS } from "@/lib/constants";
 type GRMCA = GenericRequiredModCombo[];
 type SixGRMCA = [GRMCA, GRMCA, GRMCA, GRMCA, GRMCA, GRMCA];

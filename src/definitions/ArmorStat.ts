@@ -27,3 +27,11 @@ export const getDefaultArmorStatMapping = (): ArmorStatMapping => ({
   [EArmorStatId.Intellect]: 0,
   [EArmorStatId.Strength]: 0,
 });
+
+export type StatList = [number, number, number, number, number, number];
+
+export const sumStatList = (statList: StatList): number => {
+  return statList.reduce((acc, val) => acc + val, 0);
+}
+
+export const getDefaultStatList = (): StatList => [0, 0, 0, 0, 0, 0];

@@ -64,4 +64,3 @@ export type DistanceToCondesedStatModCombosMapping = {
   [K in keyof Record<IntRange<1, 65>, never>]: number[][][][];
 };
 
-export type StatList = [number, number, number, number, number, number];

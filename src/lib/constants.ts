@@ -1,5 +1,5 @@
 export const MAX_POTENTIAL_STAT_BOOST = 65;
-export const MIN_POTENTIAL_STAT_BOOST = 1;
+export const MIN_POTENTIAL_STAT_BOOST = 0;
 
 export const MAJOR_MOD_BONUS_VALUE = 10;
 export const MINOR_MOD_BONUS_VALUE = 5;

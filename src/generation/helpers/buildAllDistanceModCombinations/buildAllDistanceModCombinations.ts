@@ -1,4 +1,5 @@
-import { DistanceToIntegerSumListsMappping, integerSumLists, paretoOptimalModCombinations, StatList } from '@/generation/definitions';
+import { StatList } from '@/definitions/ArmorStat';
+import { DistanceToIntegerSumListsMappping, integerSumLists, paretoOptimalModCombinations } from '@/generation/definitions';
 
 import { getAllValidStatModCombos } from '@/generation/helpers/getAllValidStatModCombos/getAllValidStatModCombos';
 import { MAX_POTENTIAL_STAT_BOOST, MIN_POTENTIAL_STAT_BOOST } from '@/lib/constants';
