@@ -12,7 +12,7 @@ console.log(fakeArmorItemsJSON);
 const fakeArmorItems = fakeArmorItemsJSON as ArmorItem[];
 
 const groupedArmorItems: Record<EArmorSlotId, ArmorItem[]> = fakeArmorItems
-  .slice(0, 50)
+  .slice(0, 140)
   .reduce(
     (acc, armorItem) => {
       if (!acc[armorItem.armorSlot]) {
@@ -88,17 +88,27 @@ const DesiredStatsSelector = () => {
     [EArmorStatId.Strength]: 0,
   });
 
+  const numCombinations =
+    groupedArmorItems[EArmorSlotId.Head].length *
+    groupedArmorItems[EArmorSlotId.Arms].length *
+    groupedArmorItems[EArmorSlotId.Chest].length *
+    groupedArmorItems[EArmorSlotId.Legs].length;
+
   const handleChange = (armorStatId: EArmorStatId) => {
     return (event: React.ChangeEvent<HTMLSelectElement>) => {
       const newSelectedValues = produce(selectedValues, (draft) => {
         draft[armorStatId] = parseInt(event.target.value, 10);
       });
       setSelectedValues(newSelectedValues);
+      let processed = false;
 
       groupedArmorItems[EArmorSlotId.Head].forEach((head) => {
         groupedArmorItems[EArmorSlotId.Arms].forEach((arms) => {
           groupedArmorItems[EArmorSlotId.Chest].forEach((chest) => {
             groupedArmorItems[EArmorSlotId.Legs].forEach((legs) => {
+              if (processed) {
+                return;
+              }
               processArmor({
                 armorItems: [head, arms, chest, legs],
                 desiredStats: [
@@ -110,6 +120,7 @@ const DesiredStatsSelector = () => {
                   newSelectedValues[EArmorStatId.Strength],
                 ],
               });
+              // processed = true;
             });
           });
         });
@@ -119,6 +130,8 @@ const DesiredStatsSelector = () => {
 
   return (
     <div>
+      <h1>Desired Stats Selector</h1>
+      <p>Number of combinations: {numCombinations}</p>
       {ArmorStatIdList.map((armorStatId) => (
         <div key={armorStatId} style={{ margin: "10px" }}>
           <label htmlFor={`select-${armorStatId}`} className="block w-15">

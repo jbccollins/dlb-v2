@@ -4,7 +4,7 @@ import { EArmorStatId } from "@/definitions/IdEnums";
 import { ArmorStatToStatModsMapping, StatMod } from "@/definitions/Mod";
 import { MAX_POTENTIAL_STAT_BOOST } from "@/lib/constants";
 import { StatModGroup } from "@/services/idb/definitions";
-import { getValueFromDB } from "@/services/idb/helpers";
+import { getGlobalThisFilesDBDump } from "@/services/idb/helpers";
 
 export interface ProcessArmorParams {
   armorItems: ArmorItem[];
@@ -86,13 +86,20 @@ export default async function processArmor(params: ProcessArmorParams): Promise<
     // Impossible to achieve desired stats
     return null;
   }
+  if (totalDistance === 0) {
+    // Already have desired stats
+    return [];
+  }
   /// Sort distances from highest to lowest
   distances.sort((a, b) => b.distance - a.distance);
 
   // Pull the distance values out into a string key for idb
   const key = distances.map(d => d.distance).join('-');
 
-  const rawCandidateMods = await getValueFromDB(key);
+  const rawCandidateMods = getGlobalThisFilesDBDump()[key];
+  if (typeof rawCandidateMods === 'undefined') {
+    return null;
+  }
 
   return extractStatMods({
     rawCandidateMods,
