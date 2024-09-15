@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --silent",
-    "generate": "npx ts-node ./src/generation/pre-index.ts && npx ts-node ./src/generation/index.ts"
+    "generate": "npx ts-node ./src/generation/pre-index.ts && npx ts-node ./src/generation/index.ts",
+    "generate:fakeArmorItems": "npx ts-node ./src/generation/generateFakeArmorItems/index.ts"
   },
   "dependencies": {
     "@types/jest": "^29.5.12",
@@ -37,7 +38,8 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "ts-jest": "^29.1.5",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@swc-jotai/debug-label": "^0.1.1",
@@ -46,6 +48,7 @@
     "@types/pako": "^2.0.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "eslint": "^8.26.0",
     "eslint-config-next": "^14.2.5",
     "pino-pretty": "^11.2.2",

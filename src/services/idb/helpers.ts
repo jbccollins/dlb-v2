@@ -42,9 +42,8 @@ type ExtendedGlobalThis = typeof globalThis & {
   filesDBDump: Record<string, StatModGroup[]>;
 }
 
-export const getGlobalThisFilesDBDump = () => {
-  const _globalThis = globalThis as ExtendedGlobalThis;
-  return _globalThis.filesDBDump;
+export const getStatModGroupList = (key: string): StatModGroup[] => {
+  return (globalThis as ExtendedGlobalThis).filesDBDump[key];
 }
 
 let hasDumped = false;
@@ -52,7 +51,7 @@ let hasDumped = false;
 export async function dumpAllToGlobalThis() {
   if (hasDumped) return;
   hasDumped = true;
-  console.log("dump");
+  console.log("Dumping all keys/values to globalThis...");
 
   const _globalThis = globalThis as ExtendedGlobalThis;
   try {
@@ -69,6 +68,7 @@ export async function dumpAllToGlobalThis() {
     });
 
     await tx.done;
+    console.log("Dumped all keys/values to globalThis");
   } catch (error) {
     console.error("Error dumping all keys/values to globalThis:", error);
     throw error;

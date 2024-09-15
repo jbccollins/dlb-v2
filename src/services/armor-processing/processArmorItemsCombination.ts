@@ -4,9 +4,9 @@ import { EArmorStatId } from "@/definitions/IdEnums";
 import { ArmorStatToStatModsMapping, StatMod } from "@/definitions/Mod";
 import { MAX_POTENTIAL_STAT_BOOST } from "@/lib/constants";
 import { StatModGroup } from "@/services/idb/definitions";
-import { getGlobalThisFilesDBDump } from "@/services/idb/helpers";
+import { getStatModGroupList } from "@/services/idb/helpers";
 
-export interface ProcessArmorParams {
+export interface ProcessArmorItemsCombinationParams {
   armorItems: ArmorItem[];
   desiredStats: StatList;
 }
@@ -63,7 +63,7 @@ interface Distance {
 }
 
 
-export default async function processArmor(params: ProcessArmorParams): Promise<StatMod[] | null> {
+export default async function processArmorItemsCombination(params: ProcessArmorItemsCombinationParams): Promise<StatMod[] | null> {
   const { armorItems, desiredStats } = params;
   const distances: Distance[] = desiredStats.map((d, i) => {
     return {
@@ -96,11 +96,12 @@ export default async function processArmor(params: ProcessArmorParams): Promise<
   // Pull the distance values out into a string key for idb
   const key = distances.map(d => d.distance).join('-');
 
-  const rawCandidateMods = getGlobalThisFilesDBDump()[key];
+  const rawCandidateMods = getStatModGroupList(key);
   if (typeof rawCandidateMods === 'undefined') {
     return null;
   }
 
+  // return [];
   return extractStatMods({
     rawCandidateMods,
     numArtificeItems,

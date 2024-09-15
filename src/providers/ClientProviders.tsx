@@ -11,7 +11,7 @@ export default function ClientProviders({ children }: { children: ReactNode }) {
   //useAtomsDevtools("Testing 123", { store });
   return (
     <Provider store={store}>
-      <DevTools store={store} />
+      <DevTools store={store} position="bottom-right" />
       {children}
     </Provider>
   );

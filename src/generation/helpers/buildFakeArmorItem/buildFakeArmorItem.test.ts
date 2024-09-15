@@ -7,21 +7,23 @@ beforeAll(() => {
   jest.spyOn(global.Math, 'random').mockImplementation(() => 0.5);
 });
 
-
 const testFunc = tester('buildFakeArmorItem', buildFakeArmorItem);
 
-
-const defaultOutput: ReturnType<typeof buildFakeArmorItem> = {
+const defaultOutput: Omit<ReturnType<typeof buildFakeArmorItem>, "id"> = {
   statList: [10, 16, 2, 10, 16, 2],
   isArtifice: false,
-  armorSlot: EArmorSlotId.Arms
+  armorSlot: EArmorSlotId.Arms,
 };
 
 testFunc({
   name: 'returns empty array for default input',
-  input: [],
+  input: [{ armorSlot: EArmorSlotId.Arms }],
   outputResolver: (output) => {
-    expect(output).toEqual(defaultOutput);
+    // Random seed doesn't affect uuid() so the id is always random.
+    const { id, ...rest } = output;
+    expect(typeof id).toBe('string');
+    expect(id.length).toBeGreaterThan(0);
+    expect(rest).toEqual(defaultOutput);
   },
 });
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { MAX_POTENTIAL_STAT_BOOST, MIN_POTENTIAL_STAT_BOOST } from "@/lib/constants";
-import { dumpAllToGlobalThis } from "@/services/idb/helpers";
 import { useEffect, useRef, useState } from "react";
 import { EMessageType, WorkerInput, WorkerOutput } from "./definitions";
 
@@ -34,7 +33,7 @@ export default function useFileFetcher(forceFetch: boolean) {
   const onComplete = () => {
     setFileVersion();
     setComplete(true);
-    dumpAllToGlobalThis();
+    // dumpAllToGlobalThis();
   }
 
 

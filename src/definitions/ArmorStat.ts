@@ -35,3 +35,29 @@ export const sumStatList = (statList: StatList): number => {
 }
 
 export const getDefaultStatList = (): StatList => [0, 0, 0, 0, 0, 0];
+
+const ArmorStatIdToIndexMapping = {
+  [EArmorStatId.Mobility]: 0,
+  [EArmorStatId.Resilience]: 1,
+  [EArmorStatId.Recovery]: 2,
+  [EArmorStatId.Discipline]: 3,
+  [EArmorStatId.Intellect]: 4,
+  [EArmorStatId.Strength]: 5,
+} as const;
+
+export const getArmorStatIndex = (armorStatId: EArmorStatId): number => {
+  return ArmorStatIdToIndexMapping[armorStatId];
+}
+
+export const getArmorStatId = (index: number): EArmorStatId => {
+  return ArmorStatIdList[index];
+}
+
+export enum EArmorStatIndex {
+  Mobility = 0,
+  Resilience = 1,
+  Recovery = 2,
+  Discipline = 3,
+  Intellect = 4,
+  Strength = 5,
+}

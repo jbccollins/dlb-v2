@@ -1,12 +1,16 @@
-import { ArmorItem } from "@/definitions/ArmorItem";
 import { StatList } from "@/definitions/ArmorStat";
 import { StatMod } from "@/definitions/Mod";
 
+export enum EMessageType {
+  Progress,
+  Error,
+}
+
 export interface WorkerInput {
-  armorItems: ArmorItem[];
   desiredStats: StatList;
 }
 
 export interface WorkerOutput {
-  mods: StatMod[];
+  result: Record<string, StatMod[]> | null;
+  messageType: EMessageType;
 }

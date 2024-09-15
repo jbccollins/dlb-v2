@@ -1,19 +1,17 @@
 "use client";
 
-import { initDB } from '@/services/idb/helpers';
-import { WorkerInput, WorkerOutput } from './definitions';
+import { EMessageType, WorkerInput, WorkerOutput } from './definitions';
+import processArmor from './processArmor';
 
 self.onmessage = async (event: MessageEvent<WorkerInput>) => {
-  const { armorItems, desiredStats } = event.data;
-  const db = await initDB();
+  const { desiredStats } = event.data;
 
   try {
-    console.log(`Fetching and decompressing for number: ${number}`);
-    await fetchAndDecompress(number, db);
-    const workerOutput: WorkerOutput = { type: EMessageType.Progress, number };
+    const result = await processArmor({ desiredStats });
+    const workerOutput: WorkerOutput = { result, messageType: EMessageType.Progress };
     self.postMessage(workerOutput);
   } catch (error) {
-    const workerOutput: WorkerOutput = { type: EMessageType.Progress, number, error: (error as Error).toString() };
+    const workerOutput: WorkerOutput = { messageType: EMessageType.Error, result: null };
     self.postMessage(workerOutput);
   }
 };
